@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Pwn Warren{% endblock %}</title>
+  <style>
+    :root {
+      --bg: #14110f; --panel: #211c18; --ink: #efe7dd; --muted: #a79a8c;
+      --line: #3a322b; --accent: #d98e34; --accent-ink: #1a1410;
+      --easy: #3fae6b; --medium: #d9a441; --hard: #d9544e;
+      --ok: #3fae6b; --err: #d9544e; --info: #5a93c9;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--bg); color: var(--ink);
+      font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    }
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid var(--line);
+    }
+    header h1 { font-size: 1.1rem; margin: 0; }
+    header a { color: var(--muted); text-decoration: none; margin-left: 1rem; }
+    header a:hover { color: var(--ink); }
+    main { max-width: 900px; margin: 0 auto; padding: 1.5rem; }
+    h2 { border-bottom: 1px solid var(--line); padding-bottom: .4rem; }
+    a { color: var(--accent); }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+    th, td { text-align: left; padding: .55rem .6rem; border-bottom: 1px solid var(--line); }
+    th { color: var(--muted); font-weight: 600; font-size: .85rem; text-transform: uppercase; letter-spacing: .03em; }
+    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 1.1rem 1.25rem; margin: 1rem 0; }
+    .cards { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+    .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; }
+    .card h3 { margin: 0 0 .25rem; }
+    .meta { color: var(--muted); font-size: .9rem; margin-bottom: .75rem; }
+    .badge {
+      display: inline-block; padding: .1rem .5rem; border-radius: 999px;
+      font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .03em;
+      color: var(--accent-ink);
+    }
+    .badge.easy { background: var(--easy); }
+    .badge.medium { background: var(--medium); }
+    .badge.hard { background: var(--hard); }
+    .captured { color: var(--ok); font-weight: 700; }
+    form.inline { display: flex; gap: .5rem; }
+    input, button { font: inherit; }
+    input[type=text], input[type=password] {
+      background: #17120e; border: 1px solid var(--line); color: var(--ink);
+      border-radius: 6px; padding: .5rem .6rem; width: 100%;
+    }
+    button {
+      background: var(--accent); color: var(--accent-ink); border: 0;
+      border-radius: 6px; padding: .5rem .9rem; font-weight: 700; cursor: pointer;
+    }
+    button:hover { filter: brightness(1.07); }
+    button.danger { background: var(--err); color: #fff; }
+    label { display: block; margin: .6rem 0 .2rem; color: var(--muted); font-size: .9rem; }
+    .flashes { list-style: none; padding: 0; margin: 0 0 1rem; }
+    .flashes li { padding: .6rem .8rem; border-radius: 8px; margin-bottom: .5rem; border: 1px solid var(--line); }
+    .flashes .success { border-color: var(--ok); }
+    .flashes .error { border-color: var(--err); }
+    .flashes .info { border-color: var(--info); }
+    .form-narrow { max-width: 360px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><a href="{{ url_for('index') }}" style="color:var(--ink);text-decoration:none">🐇 Pwn Warren</a></h1>
+    <nav>
+      <a href="{{ url_for('index') }}">Leaderboard</a>
+      {% if team %}
+        <a href="{{ url_for('play') }}">Play</a>
+        <form class="inline" style="display:inline" action="{{ url_for('logout') }}" method="post">
+          <button>Log out {{ team.name }}</button>
+        </form>
+      {% else %}
+        <a href="{{ url_for('login') }}">Team login</a>
+      {% endif %}
+      <a href="{{ url_for('admin_login') }}">Admin</a>
+    </nav>
+  </header>
+  <main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

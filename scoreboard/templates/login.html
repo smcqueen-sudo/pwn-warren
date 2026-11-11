@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Team login · Pwn Warren{% endblock %}
+{% block content %}
+  <h2>Team login</h2>
+  <div class="panel form-narrow">
+    <form action="{{ url_for('login') }}" method="post">
+      <label for="name">Team name</label>
+      <input type="text" id="name" name="name" autofocus required>
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required>
+      <p><button type="submit">Log in</button></p>
+    </form>
+    <p class="meta">No account? Ask the scorekeeper to add your team.</p>
+  </div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Admin login · Pwn Warren{% endblock %}
+{% block content %}
+  <h2>Scorekeeper login</h2>
+  <div class="panel form-narrow">
+    <form action="{{ url_for('admin_login') }}" method="post">
+      <label for="password">Admin password</label>
+      <input type="password" id="password" name="password" autofocus required>
+      <p><button type="submit">Log in</button></p>
+    </form>
+    <p class="meta">Set via the <code>ADMIN_PASSWORD</code> environment variable.</p>
+  </div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Admin · Pwn Warren{% endblock %}
+{% block content %}
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <h2 style="border:0">Scorekeeper</h2>
+    <form class="inline" action="{{ url_for('admin_logout') }}" method="post">
+      <button>Log out</button>
+    </form>
+  </div>
+
+  <div class="panel form-narrow">
+    <h3>Add a team</h3>
+    <form action="{{ url_for('admin_add_team') }}" method="post">
+      <label for="name">Team name</label>
+      <input type="text" id="name" name="name" required>
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required>
+      <p><button type="submit">Add team</button></p>
+    </form>
+  </div>
+
+  <h3>Teams</h3>
+  <table>
+    <thead>
+      <tr><th>Team</th><th>Captured</th><th>Score</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for row in teams %}
+        <tr>
+          <td>{{ row.name }}</td>
+          <td>{{ row.captured }}</td>
+          <td>{{ row.score }}</td>
+          <td>
+            <form class="inline" action="{{ url_for('admin_delete_team', team_id=row.id) }}" method="post"
+                  onsubmit="return confirm('Remove {{ row.name }} and all their solves?');">
+              <button class="danger" type="submit">Remove</button>
+            </form>
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan="4">No teams yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

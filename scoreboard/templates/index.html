@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Leaderboard · Pwn Warren{% endblock %}
+{% block content %}
+  <h2>Leaderboard</h2>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Team</th><th>Captured</th><th>Score</th></tr>
+    </thead>
+    <tbody>
+      {% for row in leaderboard %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ row.name }}</td>
+          <td>{{ row.captured }} / {{ total_challenges }}</td>
+          <td>{{ row.score }}</td>
+        </tr>
+      {% else %}
+        <tr><td colspan="4">No teams yet. The scorekeeper can add them from the Admin panel.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Burrows in play</h2>
+  <div class="cards">
+    {% for challenge in challenges %}
+      <div class="card">
+        <h3>{{ challenge.name }}</h3>
+        <div class="meta">
+          <span class="badge {{ challenge.difficulty|lower }}">{{ challenge.difficulty }}</span>
+          · {{ challenge.points }} pts
+        </div>
+      </div>
+    {% else %}
+      <p>No burrows registered yet.</p>
+    {% endfor %}
+  </div>
+{% endblock %}

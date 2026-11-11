@@ -1,0 +1,10 @@
+# Generated flags — the repo must ship vulnerabilities, not answers.
+burrows/*/.flag.env
+scoreboard/seed/challenges.json
+
+# Local env
+.env
+
+# Python
+__pycache__/
+*.pyc

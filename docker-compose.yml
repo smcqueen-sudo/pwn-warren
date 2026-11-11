@@ -1,0 +1,34 @@
+# Pwn-Warren — one scoreboard (infrastructure) + N burrows (targets).
+# All ports bind 0.0.0.0 so the whole LAN can reach them. THIS IS DELIBERATE —
+# run only on a trusted LAN or VPN, never on a public IP. See README Safety.
+#
+# Adding a burrow = copy the burrow1 block, bump the host port to 800N, and
+# point it at the new burrow directory + its .flag.env.
+
+services:
+  scoreboard:
+    build: ./scoreboard
+    ports:
+      - "0.0.0.0:8000:5000"
+    environment:
+      # Scorekeeper password; required. Set it in your shell before `up`.
+      ADMIN_PASSWORD: "${ADMIN_PASSWORD:?set ADMIN_PASSWORD before docker compose up}"
+      # Optional: a fixed session key so logins survive restarts.
+      SECRET_KEY: "${SECRET_KEY:-}"
+    volumes:
+      - scoreboard-data:/data
+      # Full challenge registry (every flag) — mounted read-only, scoreboard only.
+      - ./scoreboard/seed:/seed:ro
+    restart: unless-stopped
+
+  burrow1:
+    build: ./burrows/burrow1-pathtraversal
+    ports:
+      - "0.0.0.0:8001:5000"
+    # Supplies FLAG — this burrow's own flag only (never the full registry).
+    env_file:
+      - ./burrows/burrow1-pathtraversal/.flag.env
+    restart: unless-stopped
+
+volumes:
+  scoreboard-data:

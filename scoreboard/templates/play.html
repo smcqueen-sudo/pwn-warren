@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Play · Pwn Warren{% endblock %}
+{% block content %}
+  <h2>Submit flags — {{ team.name }}</h2>
+  <p class="meta">Pop a burrow, read its flag, and submit it in that burrow's box below.</p>
+  <div class="cards">
+    {% for challenge in challenges %}
+      <div class="card">
+        <h3>{{ challenge.name }}</h3>
+        <div class="meta">
+          <span class="badge {{ challenge.difficulty|lower }}">{{ challenge.difficulty }}</span>
+          · {{ challenge.points }} pts
+        </div>
+        {% if challenge.id in solved %}
+          <p class="captured">✓ Captured</p>
+        {% else %}
+          <form class="inline" action="{{ url_for('submit') }}" method="post">
+            <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
+            <input type="text" name="flag" placeholder="flag{...}" required>
+            <button type="submit">Submit</button>
+          </form>
+        {% endif %}
+      </div>
+    {% else %}
+      <p>No burrows registered yet.</p>
+    {% endfor %}
+  </div>
+{% endblock %}
