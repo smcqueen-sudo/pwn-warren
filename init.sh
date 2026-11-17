@@ -1,15 +1,6 @@
 #!/usr/bin/env bash
-# init.sh — generate a random flag per burrow and assemble the scoreboard's
+# Generates a random flag per burrow and assemble the scoreboard's
 # challenge registry. Run ONCE before the first `docker compose up`.
-#
-# Adding a burrow later is a single row in the BURROWS registry below (plus a
-# service in docker-compose.yml and a writeup in solutions/).
-#
-# Flags are written to two places, and the split is the whole security model:
-#   - burrows/<dir>/.flag.env   -> FLAG=flag{...}, that burrow's flag ONLY
-#   - scoreboard/seed/challenges.json -> the FULL registry (every flag)
-# Never mount challenges.json into a burrow, or popping one burrow leaks all
-# flags. Both outputs are gitignored.
 #
 # Re-running rotates flags, which invalidates every already-submitted flag, so
 # this refuses to clobber existing flags unless you pass --force.
@@ -21,6 +12,7 @@ cd "$(dirname "$0")"
 # One line per burrow. This is the single source of truth init.sh iterates.
 BURROWS=(
   "burrow1|burrow1-pathtraversal|Burrow 1 - Burrow Library|100|Easy"
+  "burrow2|burrow2-marshal|Burrow 2 - Warren Lounge|150|Medium"
 )
 
 FORCE=0
@@ -35,7 +27,7 @@ SEED_DIR="scoreboard/seed"
 SEED_FILE="$SEED_DIR/challenges.json"
 mkdir -p "$SEED_DIR"
 
-# Refuse to clobber existing flags unless --force (see header note).
+# Refuse to clobber existing flags unless --force
 if [[ $FORCE -eq 0 ]]; then
   for row in "${BURROWS[@]}"; do
     IFS='|' read -r id dir _ _ _ <<<"$row"

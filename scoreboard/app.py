@@ -1,5 +1,6 @@
-"""Pwn-Warren scoreboard — infrastructure, not a target: keep it hardened
-(parameterized SQL, autoescaped templates, hashed passwords).
+"""Pwn-Warren scoreboard. Not a target :P
+
+To wipe SQLite, just run `docker compose down -v`
 
 Flask + SQLite on a named volume; seeds from /seed/challenges.json (the full
 flag registry, which lives only here) on first boot.

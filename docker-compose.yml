@@ -1,6 +1,6 @@
-# Pwn-Warren — one scoreboard (infrastructure) + N burrows (targets).
-# All ports bind 0.0.0.0 so the whole LAN can reach them. THIS IS DELIBERATE —
-# run only on a trusted LAN or VPN, never on a public IP. See README Safety.
+# Pwn-Warren - one scoreboard (infrastructure) + N burrows (targets).
+# All ports bind 0.0.0.0 so the whole LAN can reach them. THIS IS DELIBERATE -
+# run only on a trusted LAN or VPN, never on a public IP.
 #
 # Adding a burrow = copy the burrow1 block, bump the host port to 800N, and
 # point it at the new burrow directory + its .flag.env.
@@ -17,7 +17,7 @@ services:
       SECRET_KEY: "${SECRET_KEY:-}"
     volumes:
       - scoreboard-data:/data
-      # Full challenge registry (every flag) — mounted read-only, scoreboard only.
+      # Full challenge registry (every flag) - mounted read-only, scoreboard only.
       - ./scoreboard/seed:/seed:ro
     restart: unless-stopped
 
@@ -25,9 +25,17 @@ services:
     build: ./burrows/burrow1-pathtraversal
     ports:
       - "0.0.0.0:8001:5000"
-    # Supplies FLAG — this burrow's own flag only (never the full registry).
+    # Supplies FLAG - this burrow's own flag only (never the full registry).
     env_file:
       - ./burrows/burrow1-pathtraversal/.flag.env
+    restart: unless-stopped
+
+  burrow2:
+    build: ./burrows/burrow2-marshal
+    ports:
+      - "0.0.0.0:8002:5000"
+    env_file:
+      - ./burrows/burrow2-marshal/.flag.env
     restart: unless-stopped
 
 volumes:
