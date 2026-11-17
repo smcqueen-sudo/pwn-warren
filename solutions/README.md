@@ -1,4 +1,4 @@
-# Solutions — intended exploit walkthroughs
+# Solutions - intended exploit walkthroughs
 
 Spoilers :)
 

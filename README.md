@@ -5,13 +5,13 @@ intentionally-vulnerable web apps ("burrows") plus a scoreboard. Players on the
 same network exploit a burrow, read a flag out of the service user's home
 directory, and submit it to the scoreboard. Most flags captured wins.
 
-> ## ⚠️ Safety — read first
+> ## ⚠️ Safety - read first
 >
 > This project is, by design, a pile of **remote code execution**. Run it only
-> on a **trusted LAN or a VPN** — **never bound to a public IP.** On the open
+> on a **trusted LAN or a VPN** - **never bound to a public IP.** On the open
 > internet these services are co-opted within minutes of discovery.
 >
-> - On Ubuntu, Docker writes its own iptables rules and can **bypass `ufw`** —
+> - On Ubuntu, Docker writes its own iptables rules and can **bypass `ufw`** -
 >   published ports may be reachable even when `ufw` looks like it's blocking
 >   them. Control exposure at the network / security-group level, not with
 >   `ufw` alone.
@@ -34,9 +34,9 @@ Then:
 
 | Service    | Port | Role                                    | Difficulty |
 | ---------- | ---- | --------------------------------------- | ---------- |
-| scoreboard | 8000 | infrastructure (hardened, not a target) | —          |
-| burrow1    | 8001 | Burrow Library — path traversal / LFI   | Easy       |
-| burrow2    | 8002 | Warren Lounge — Ruby Marshal.load RCE   | Medium     |
+| scoreboard | 8000 | infrastructure (hardened, not a target) | -          |
+| burrow1    | 8001 | Burrow Library - path traversal / LFI   | Easy       |
+| burrow2    | 8002 | Warren Lounge - Ruby Marshal.load RCE   | Medium     |
 
 ## Housekeeping
 
