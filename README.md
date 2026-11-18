@@ -37,6 +37,7 @@ Then:
 | scoreboard | 8000 | infrastructure (hardened, not a target) | -          |
 | burrow1    | 8001 | Burrow Library - path traversal / LFI   | Easy       |
 | burrow2    | 8002 | Warren Lounge - Ruby Marshal.load RCE   | Medium     |
+| burrow3    | 8003 | Burrow Backup - tar wildcard injection  | Hard       |
 
 ## Housekeeping
 

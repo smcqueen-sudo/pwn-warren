@@ -38,5 +38,13 @@ services:
       - ./burrows/burrow2-marshal/.flag.env
     restart: unless-stopped
 
+  burrow3:
+    build: ./burrows/burrow3-tarwildcard
+    ports:
+      - "0.0.0.0:8003:5000"
+    env_file:
+      - ./burrows/burrow3-tarwildcard/.flag.env
+    restart: unless-stopped
+
 volumes:
   scoreboard-data:

