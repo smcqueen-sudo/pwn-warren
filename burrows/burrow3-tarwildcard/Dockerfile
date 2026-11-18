@@ -14,9 +14,8 @@ RUN useradd --create-home --home-dir /home/burrow burrow \
     && chown root:root /home/burrow \
     && chmod 755 /home/burrow
 
-# The backup tool's working area
+# Parent dirs for per-session upload/backup state. The app creates a subdir per vistor
 RUN mkdir -p /app/uploads /app/backups \
-    && printf 'Carrot inventory: 42 crates.\nRemember to rotate the parsnips.\n' > /app/uploads/notes.txt \
     && chown -R burrow:burrow /app/uploads /app/backups
 
 COPY app.py /app/app.py
