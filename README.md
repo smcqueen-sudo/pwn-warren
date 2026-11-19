@@ -32,12 +32,12 @@ Then:
 
 ## What's here
 
-| Service    | Port | Role                                    | Difficulty |
-| ---------- | ---- | --------------------------------------- | ---------- |
-| scoreboard | 8000 | infrastructure (hardened, not a target) | -          |
-| burrow1    | 8001 | Burrow Library - path traversal / LFI   | Easy       |
-| burrow2    | 8002 | Warren Lounge - Ruby Marshal.load RCE   | Medium     |
-| burrow3    | 8003 | Burrow Backup - tar wildcard injection  | Hard       |
+| Service (name) | Port | Difficulty |
+| -------------- | ---- | ---------- |
+| scoreboard     | 8000 | -          |
+| Burrow library | 8001 | Easy       |
+| Warren Lounge  | 8002 | Medium     |
+| Burrow Backup  | 8003 | Hard       |
 
 ## Housekeeping
 
@@ -46,7 +46,7 @@ scripts/reset.sh            # restore tampered burrows; same flags, scoreboard u
 docker compose down -v      # full teardown (also wipes the scoreboard volume)
 
 # recreate one burrow without touching the rest or the scoreboard:
-docker compose up -d --build --force-recreate burrow1
+docker compose up -d --build --force-recreate library
 ```
 
 **Never run `init.sh` mid-event** - it generates new flags and invalidates every
@@ -54,7 +54,7 @@ already-submitted one. Use `scripts/reset.sh` to recover from tampering.
 
 ## Adding a burrow
 
-Create `burrows/burrowN-<vulnclass>/` (Dockerfile + app.py + entrypoint.sh following
+Create `burrows/<burrowName>/` (Dockerfile + app.py + entrypoint.sh following
 the plant-flag -> env-scrub -> `gosu burrow` pattern), add a service to
 `docker-compose.yml` on port `800N`, add one row to the `BURROWS` registry in
 `init.sh`, and drop a writeup in `solutions/`.

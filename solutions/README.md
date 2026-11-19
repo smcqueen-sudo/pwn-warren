@@ -4,7 +4,7 @@ Spoilers :)
 
 ---
 
-## burrow1 - Burrow Library (path traversal / LFI, Easy)
+## Burrow Library (path traversal / LFI, Easy)
 
 TLDR: Unsanitized query param that returns the output of any file
 
@@ -29,7 +29,7 @@ TLDR: Unsanitized query param that returns the output of any file
 
 ---
 
-## burrow2 - Warren Lounge (insecure deserialization / Ruby `Marshal.load` RCE, Medium)
+## Warren Lounge (insecure deserialization / Ruby `Marshal.load` RCE, Medium)
 
 TLDR: `Marshal.load` is inherently a vulnerable function. We can inject RCE into the `prefs`
 cookie by using the code at `/debug/source` as reference
@@ -82,7 +82,7 @@ cookie by using the code at `/debug/source` as reference
 
 ---
 
-## burrow3 - Burrow Backup (tar wildcard injection, Hard)
+## Burrow Backup (tar wildcard injection, Hard)
 
 TLDR: The "Back up my uploads" button runs `tar czf ... *` in the upload dir.
 GNU tar treats option-looking filenames as options, so an uploaded file named

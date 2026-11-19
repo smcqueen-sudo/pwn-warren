@@ -11,9 +11,9 @@ cd "$(dirname "$0")"
 # Burrow registry: id | dir | display name | points | difficulty
 # One line per burrow. This is the single source of truth init.sh iterates.
 BURROWS=(
-  "burrow1|burrow1-pathtraversal|Burrow 1 - Burrow Library|100|Easy"
-  "burrow2|burrow2-marshal|Burrow 2 - Warren Lounge|150|Medium"
-  "burrow3|burrow3-tarwildcard|Burrow 3 - Burrow Backup|200|Hard"
+  "library|library|Burrow Library|100|Easy"
+  "lounge|lounge|Warren Lounge|150|Medium"
+  "backup|backup|Burrow Backup|200|Hard"
 )
 
 FORCE=0

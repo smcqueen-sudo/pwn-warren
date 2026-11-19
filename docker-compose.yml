@@ -2,7 +2,7 @@
 # All ports bind 0.0.0.0 so the whole LAN can reach them. THIS IS DELIBERATE -
 # run only on a trusted LAN or VPN, never on a public IP.
 #
-# Adding a burrow = copy the burrow1 block, bump the host port to 800N, and
+# Adding a burrow = copy a burrow block, bump the host port to 800N, and
 # point it at the new burrow directory + its .flag.env.
 
 services:
@@ -21,29 +21,29 @@ services:
       - ./scoreboard/seed:/seed:ro
     restart: unless-stopped
 
-  burrow1:
-    build: ./burrows/burrow1-pathtraversal
+  library:
+    build: ./burrows/library
     ports:
       - "0.0.0.0:8001:5000"
     # Supplies FLAG - this burrow's own flag only (never the full registry).
     env_file:
-      - ./burrows/burrow1-pathtraversal/.flag.env
+      - ./burrows/library/.flag.env
     restart: unless-stopped
 
-  burrow2:
-    build: ./burrows/burrow2-marshal
+  lounge:
+    build: ./burrows/lounge
     ports:
       - "0.0.0.0:8002:5000"
     env_file:
-      - ./burrows/burrow2-marshal/.flag.env
+      - ./burrows/lounge/.flag.env
     restart: unless-stopped
 
-  burrow3:
-    build: ./burrows/burrow3-tarwildcard
+  backup:
+    build: ./burrows/backup
     ports:
       - "0.0.0.0:8003:5000"
     env_file:
-      - ./burrows/burrow3-tarwildcard/.flag.env
+      - ./burrows/backup/.flag.env
     restart: unless-stopped
 
 volumes:
