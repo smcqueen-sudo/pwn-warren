@@ -46,5 +46,13 @@ services:
       - ./burrows/backup/.flag.env
     restart: unless-stopped
 
+  dispatch:
+    build: ./burrows/dispatch
+    ports:
+      - "0.0.0.0:8004:5000"
+    env_file:
+      - ./burrows/dispatch/.flag.env
+    restart: unless-stopped
+
 volumes:
   scoreboard-data:

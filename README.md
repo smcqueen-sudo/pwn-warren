@@ -38,6 +38,7 @@ Then:
 | Burrow library | 8001 | Easy       |
 | Warren Lounge  | 8002 | Medium     |
 | Burrow Backup  | 8003 | Hard       |
+| Warren Dispatch | 8004 | Medium    |
 
 ## Housekeeping
 
